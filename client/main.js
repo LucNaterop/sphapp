@@ -1,6 +1,7 @@
-// our code goes here
 
 var acc;
+var data = [];
+var millis = 50;
 
 $(function(){
 	window.addEventListener('devicemotion', function(event) {
@@ -14,11 +15,22 @@ $(function(){
 
 
 	$('#start').click(() => {
-		alert('you clicked on START');
+		data = [];					// empty the array first
+		setInterval(() => {
+			var abs_acc = Math.sqrt(acc.x*acc.x + acc.y*acc.y + acc.z*acc.z);
+			data.push(abs_acc);
+		}, millis)
 	});
 
 	$('#stop').click(() => {
-		alert('you clicked on STOP');
+		var amountFreeFall = 0;
+		for(var i = 0; i<data.length; i++){
+			if(7 < data[i] && data[i] < 11) amountFreeFall++;
+		}
+		var T = amountFreeFall*millis/1000;
+		var h = 1/8*9.81*T*T;
+		alert('Time in air: ' + T + ' s \nThrow height: ' + h + ' m');
+		window.location.href = window.location.href;
 	})
 });
 
